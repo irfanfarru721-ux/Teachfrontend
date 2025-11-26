@@ -4,8 +4,22 @@ import { useAuth } from "../context/AuthContext.jsx";
 
 export default function ProtectedRoute({ children, role }) {
   const { user, loading } = useAuth();
-  if (loading) return <p>Loading...</p>;
-  if (!user) return <Navigate to="/auth/login" replace />;
-  if (role && user.role !== role) return <Navigate to="/" replace />;
+
+  // When authentication is still loading
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  // If no user → redirect to login
+  if (!user) {
+    return <Navigate to="/auth/login" replace />;
+  }
+
+  // If role is required → check user role
+  if (role && user.role !== role) {
+    return <Navigate to="/" replace />;
+  }
+
+  // If all checks pass → give access
   return children;
 }
