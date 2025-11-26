@@ -1,64 +1,78 @@
-// src/pages/Signup.jsx
 import React, { useState } from "react";
-import { registerUser, setAuthToken } from "../api/api";
+import { registerUser, setAuthToken } from "../api/API";
 import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [msg, setMsg] = useState("");
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setError("");
     try {
-      const data = await registerUser({ name, email, password });
-      setAuthToken(data.token);
-      localStorage.setItem("token", data.token); // Optional: persist login
+      const res = await registerUser({ name, email, password });
+
+      const token = res.data.token;
+      localStorage.setItem("token", token);
+      setAuthToken(token);
+
+      setMsg("Signup successful!");
       navigate("/dashboard");
     } catch (err) {
-      setError(err.message);
+      setMsg("Signup failed, email may already exist");
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <form onSubmit={handleSignup} className="bg-white p-6 rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">Sign Up</h2>
-        {error && <p className="text-red-500 mb-3">{error}</p>}
+    <div style={{ maxWidth: "400px", margin: "50px auto" }}>
+      <h2>Signup</h2>
+
+      <form onSubmit={handleSignup}>
         <input
           type="text"
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="border p-2 w-full mb-3 rounded"
           required
+          style={{ width: "100%", marginBottom: "10px" }}
         />
+
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 w-full mb-3 rounded"
           required
+          style={{ width: "100%", marginBottom: "10px" }}
         />
+
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 w-full mb-3 rounded"
           required
+          style={{ width: "100%", marginBottom: "10px" }}
         />
-        <button
-          type="submit"
-          className="bg-green-500 text-white p-2 w-full rounded hover:bg-green-600 transition"
-        >
-          Sign Up
+
+        <button type="submit" style={{ width: "100%", padding: "10px" }}>
+          Signup
         </button>
       </form>
+
+      <p style={{ color: "red", marginTop: "10px" }}>{msg}</p>
+
+      <p>
+        Already have an account?{" "}
+        <span
+          style={{ color: "blue", cursor: "pointer" }}
+          onClick={() => navigate("/login")}
+        >
+          Login
+        </span>
+      </p>
     </div>
   );
 }
