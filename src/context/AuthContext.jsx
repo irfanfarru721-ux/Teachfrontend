@@ -1,39 +1,42 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import apiClient from "../api/apiClient.js";
+import { createContext, useContext, useEffect, useState } from "react";
+import api from "../api/apiClient.js";
 
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Check logged user
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      apiClient.get("/auth/me", { headers: { Authorization: `Bearer ${token}` } })
-        .then(res => setUser(res.data))
-        .catch(() => setUser(null))
-        .finally(() => setLoading(false));
-    } else setLoading(false);
+    async function loadUser() {
+      try {
+        const res = await api.get("/api/auth/me");
+        setUser(res.data.user);
+      } catch (err) {
+        setUser(null);
+      }
+      setLoading(false);
+    }
+    loadUser();
   }, []);
 
-  const login = (token, userData) => {
-    localStorage.setItem("token", token);
-    setUser(userData);
+  const login = async (email, password) => {
+    const res = await api.post("/api/auth/login", { email, password });
+    setUser(res.data.user);
+    return res.data;
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
+  const logout = async () => {
+    await api.post("/api/auth/logout");
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export const useAuth = () => useContext(AuthContext);
