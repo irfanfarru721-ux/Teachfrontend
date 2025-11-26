@@ -2,13 +2,13 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { setAuthToken } from "../api/api";
 
+// Create context
 const AuthContext = createContext();
 
 // Provider
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Load token from localStorage on mount
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -36,5 +36,8 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook for consuming context
+// Custom hook to use context
 export const useAuth = () => useContext(AuthContext);
+
+// ✅ Export AuthContext itself
+export { AuthContext };
