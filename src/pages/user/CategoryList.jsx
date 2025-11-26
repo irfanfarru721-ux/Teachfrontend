@@ -1,27 +1,23 @@
-import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import apiClient from "../../api/apiClient.js";
+import { useEffect, useState } from "react";
+import api from "../../api/apiClient.js";
 
 export default function CategoryList() {
   const { vendorId } = useParams();
-  const [categories, setCategories] = useState([]);
+  const [cats, setCats] = useState([]);
 
   useEffect(() => {
-    apiClient.get(`/categories?vendor=${vendorId}`)
-      .then(res => setCategories(res.data))
-      .catch(err => console.error(err));
-  }, [vendorId]);
+    api.get(`/api/categories/vendor/${vendorId}`).then((res) => setCats(res.data));
+  }, []);
 
   return (
-    <div>
-      <h2>Categories</h2>
-      <ul>
-        {categories.map(c => (
-          <li key={c._id}>
-            <Link to={`/subcategories/${vendorId}/${c._id}`}>{c.name}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <h1>Categories</h1>
+      {cats.map((c) => (
+        <p key={c._id}>
+          <Link to={`/subcategories/${c._id}`}>{c.name}</Link>
+        </p>
+      ))}
+    </>
   );
 }
