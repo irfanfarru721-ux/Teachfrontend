@@ -1,27 +1,19 @@
-import React, { useEffect, useState } from "react";
-import apiClient from "../../api/apiClient.js";
+import { useState, useEffect } from "react";
+import api from "../../api/apiClient.js";
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    apiClient.get("/admin/orders")
-      .then(res => setOrders(res.data))
-      .catch(err => console.error(err));
+    api.get("/api/orders").then((res) => setOrders(res.data));
   }, []);
 
   return (
-    <div>
-      <h2>Orders</h2>
-      {orders.length === 0 ? <p>No orders found.</p> : (
-        <ul>
-          {orders.map(order => (
-            <li key={order._id}>
-              Order #{order._id} - User: {order.user?.name || "N/A"} - Total: ₹{order.total}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <>
+      <h1>All Orders</h1>
+      {orders.map((o) => (
+        <p key={o._id}>Order #{o._id}</p>
+      ))}
+    </>
   );
 }
