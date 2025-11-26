@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { API_URL } from "../config";
+import { API_URL } from "../config.js"; // <-- add .js extension
 
 const AuthContext = createContext();
 
@@ -24,11 +24,13 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const res = await axios.post(`${API_URL}/auth/login`, { email, password });
     localStorage.setItem("token", res.data.token);
+    localStorage.setItem("role", res.data.user.role); // store role
     setUser(res.data.user);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     setUser(null);
   };
 
