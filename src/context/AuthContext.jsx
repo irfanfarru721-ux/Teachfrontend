@@ -1,30 +1,37 @@
 import { createContext, useState, useEffect } from "react";
-import { setAuthToken } from "../api/api.js";
 
 export const AuthContext = createContext();
 
-export default function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
-    if (token) {
-      setAuthToken(token);
-      localStorage.setItem("token", token);
-    } else {
-      setAuthToken(null);
-      localStorage.removeItem("token");
+    const storedUser = localStorage.getItem("user");
+    const storedToken = localStorage.getItem("token");
+    if (storedUser && storedToken) {
+      setUser(JSON.parse(storedUser));
+      setToken(storedToken);
     }
-  }, [token]);
+  }, []);
+
+  const login = (userData, token) => {
+    setUser(userData);
+    setToken(token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", token);
+  };
 
   const logout = () => {
     setUser(null);
-    setToken("");
+    setToken(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, token, setToken, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
