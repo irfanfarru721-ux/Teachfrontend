@@ -1,9 +1,4 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-nav a {
-  text-decoration: none;
-  color: white;
-  margin-right: 10px;
-}
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+h1, h2 { text-align: center; }
+form { max-width: 400px; margin: 50px auto; display: flex; flex-direction: column; gap: 10px; }
+input, button { padding: 8px; font-size: 16px; }
