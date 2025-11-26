@@ -7,10 +7,10 @@ export default function LoginRegister() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const [isLogin, setIsLogin] = useState(true); // toggle form
+  const [isLogin, setIsLogin] = useState(true);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState(""); // for signup
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
@@ -27,8 +27,9 @@ export default function LoginRegister() {
 
       const token = res.data.token;
       login(token); // save token in AuthContext
-      navigate("/"); // redirect to home/dashboard
+      navigate("/"); // redirect to Home
     } catch (err) {
+      console.error("Backend Error:", err.response?.data || err);
       setError(err.response?.data?.message || "Something went wrong");
     }
   };
