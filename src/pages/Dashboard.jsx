@@ -16,7 +16,7 @@ export default function Dashboard() {
     // Fetch modules after login
     const fetchModules = async () => {
       try {
-        const res = await fetch("https://srudentbackend.onrender.com/api/modules", {
+        const res = await fetch("https://srudentbackend-1.onrender.com/api/modules", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
