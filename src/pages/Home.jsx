@@ -20,11 +20,11 @@ export default function Home() {
       try {
         const headers = { Authorization: `Bearer ${token}` };
         const [modRes, shopRes, catRes, subRes, prodRes] = await Promise.all([
-          fetch("https://super-backend-bzin.onrender.com/api/modules", { headers }).then(r => r.json()),
-          fetch("https://super-backend-bzin.onrender.com/api/shops", { headers }).then(r => r.json()),
-          fetch("https://super-backend-bzin.onrender.com/api/categories", { headers }).then(r => r.json()),
-          fetch("https://super-backend-bzin.onrender.com/api/subcategories", { headers }).then(r => r.json()),
-          fetch("https://super-backend-bzin.onrender.com/api/products", { headers }).then(r => r.json()),
+          fetch("https://srudentbackend.onrender.com/api/modules", { headers }).then(r => r.json()),
+          fetch("https://srudentbackend.onrender.com/api/shops", { headers }).then(r => r.json()),
+          fetch("https://srudentbackend.onrender.com/api/categories", { headers }).then(r => r.json()),
+          fetch("https://srudentbackend.onrender.com/api/subcategories", { headers }).then(r => r.json()),
+          fetch("https://srudentbackend.onrender.com/api/products", { headers }).then(r => r.json()),
         ]);
 
         setModules(modRes);
