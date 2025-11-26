@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { loginUser, setAuthToken } from "../api/API";
+import React, { useState, useContext } from "react";
+import { loginUser } from "../api/api.js";
+import { AuthContext } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { setUser, setToken } = useContext(AuthContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
@@ -12,16 +15,10 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await loginUser({ email, password });
-
-      // Save token in localStorage
-      const token = res.data.token;
-      localStorage.setItem("token", token);
-
-      // Set token for API
-      setAuthToken(token);
-
+      setToken(res.data.token);
+      setUser(res.data.user);
       setMsg("Login successful!");
-      navigate("/dashboard"); // Redirect
+      navigate("/"); // Redirect to Home
     } catch (err) {
       setMsg("Invalid email or password");
     }
@@ -39,7 +36,6 @@ export default function Login() {
           required
           style={{ width: "100%", marginBottom: "10px" }}
         />
-
         <input
           type="password"
           placeholder="Password"
@@ -48,17 +44,11 @@ export default function Login() {
           required
           style={{ width: "100%", marginBottom: "10px" }}
         />
-
-        <button
-          type="submit"
-          style={{ width: "100%", padding: "10px" }}
-        >
+        <button type="submit" style={{ width: "100%", padding: "10px" }}>
           Login
         </button>
       </form>
-
       <p style={{ color: "red", marginTop: "10px" }}>{msg}</p>
-
       <p>
         Don't have an account?{" "}
         <span
