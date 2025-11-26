@@ -15,9 +15,9 @@ export default function Navbar() {
         const headers = { Authorization: `Bearer ${token}` };
         try {
           const [modulesRes, shopsRes, productsRes] = await Promise.all([
-            fetch("https://super-backend-bzin.onrender.com/api/modules", { headers }),
-            fetch("https://super-backend-bzin.onrender.com/api/shops", { headers }),
-            fetch("https://super-backend-bzin.onrender.com/api/products", { headers }),
+            fetch("https://https://srudentbackend-1.onrender.com/api/modules", { headers }),
+            fetch("https://https://srudentbackend-1.onrender.com/api/shops", { headers }),
+            fetch("https://https://srudentbackend-1.onrender.com/api/products", { headers }),
           ]);
           setModules(await modulesRes.json());
           setShops(await shopsRes.json());
