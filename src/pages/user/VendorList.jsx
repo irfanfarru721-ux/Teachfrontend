@@ -1,26 +1,22 @@
-import React, { useEffect, useState } from "react";
-import apiClient from "../../api/apiClient.js";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import api from "../../api/apiClient.js";
 
 export default function VendorList() {
   const [vendors, setVendors] = useState([]);
 
   useEffect(() => {
-    apiClient.get("/vendors")
-      .then(res => setVendors(res.data))
-      .catch(err => console.error(err));
+    api.get("/api/vendors").then((res) => setVendors(res.data));
   }, []);
 
   return (
-    <div>
-      <h2>All Vendors</h2>
-      <ul>
-        {vendors.map(v => (
-          <li key={v._id}>
-            <Link to={`/categories/${v._id}`}>{v.name}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <h1>Vendors</h1>
+      {vendors.map((v) => (
+        <p key={v._id}>
+          <Link to={`/categories/${v._id}`}>{v.name}</Link>
+        </p>
+      ))}
+    </>
   );
 }
