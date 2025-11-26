@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext.jsx";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Home() {
-  const { user, token } = useContext(AuthContext);
+  const { user } = useAuth(); // use the hook
   const [loading, setLoading] = useState(true);
   const [modules, setModules] = useState([]);
   const [shops, setShops] = useState([]);
@@ -11,10 +11,12 @@ export default function Home() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    if (!user || !token) {
+    if (!user) {
       setLoading(false);
       return;
     }
+
+    const token = user.token;
 
     const fetchData = async () => {
       try {
@@ -40,7 +42,7 @@ export default function Home() {
     };
 
     fetchData();
-  }, [user, token]);
+  }, [user]);
 
   if (!user) return <p>Please login to see products and modules.</p>;
   if (loading) return <p>Loading...</p>;
@@ -60,11 +62,9 @@ export default function Home() {
                     <div key={sub._id} style={{ marginLeft: "20px" }}>
                       <h5>{sub.name}</h5>
                       <ul>
-                        {products
-                          .filter(p => p.subcategoryId === sub._id)
-                          .map(p => (
-                            <li key={p._id}>{p.name} - ${p.price}</li>
-                          ))}
+                        {products.filter(p => p.subcategoryId === sub._id).map(p => (
+                          <li key={p._id}>{p.name} - ${p.price}</li>
+                        ))}
                       </ul>
                     </div>
                   ))}
