@@ -1,27 +1,26 @@
-import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import apiClient from "../../api/apiClient.js";
+import { useEffect, useState } from "react";
+import api from "../../api/apiClient.js";
+import { useCart } from "../../context/CartContext.jsx";
 
 export default function ProductList() {
-  const { vendorId, categoryId, subCategoryId } = useParams();
+  const { subCatId } = useParams();
   const [products, setProducts] = useState([]);
+  const { addToCart } = useCart();
 
   useEffect(() => {
-    apiClient.get(`/products?vendor=${vendorId}&category=${categoryId}&subcategory=${subCategoryId}`)
-      .then(res => setProducts(res.data))
-      .catch(err => console.error(err));
-  }, [vendorId, categoryId, subCategoryId]);
+    api.get(`/api/products/subcategory/${subCatId}`).then((res) => setProducts(res.data));
+  }, []);
 
   return (
-    <div>
-      <h2>Products</h2>
-      <ul>
-        {products.map(p => (
-          <li key={p._id}>
-            {p.name} - ₹{p.price}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <h1>Products</h1>
+      {products.map((p) => (
+        <div key={p._id} style={{ marginBottom: 10 }}>
+          <p>{p.name}</p>
+          <button onClick={() => addToCart(p)}>Add to Cart</button>
+        </div>
+      ))}
+    </>
   );
 }
