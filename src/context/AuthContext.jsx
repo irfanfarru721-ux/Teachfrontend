@@ -1,41 +1,23 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
-import { API_URL } from "../config.js"; // <-- add .js extension
+import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState({ role: "user" }); // default for testing
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      axios
-        .get(`${API_URL}/auth/me`, { headers: { Authorization: `Bearer ${token}` } })
-        .then((res) => setUser(res.data.user))
-        .catch(() => setUser(null))
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
-  }, []);
-
-  const login = async (email, password) => {
-    const res = await axios.post(`${API_URL}/auth/login`, { email, password });
-    localStorage.setItem("token", res.data.token);
-    localStorage.setItem("role", res.data.user.role); // store role
-    setUser(res.data.user);
+  const login = (email, password) => {
+    // temporarily just set user
+    setUser({ role: email === "admin@gmail.com" ? "admin" : "user" });
+    localStorage.setItem("role", user.role);
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
     setUser(null);
+    localStorage.removeItem("role");
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
