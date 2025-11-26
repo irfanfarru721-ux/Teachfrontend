@@ -17,7 +17,7 @@ const SignupPage = () => {
 
     try {
       const res = await fetch(
-        "https://super-backend-bzin.onrender.com/api/auth/signup",
+        "https://https://srudentbackend-1.onrender.com/api/auth/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
