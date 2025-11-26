@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from "react";
-import apiClient from "../../api/apiClient.js";
+import { useState, useEffect } from "react";
+import api from "../../api/apiClient.js";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    apiClient.get("/admin/products")
-      .then(res => setProducts(res.data))
-      .catch(err => console.error(err));
+    api.get("/api/products").then((res) => setProducts(res.data));
   }, []);
 
   return (
-    <div>
-      <h2>Products</h2>
-      <ul>
-        {products.map(p => (
-          <li key={p._id}>
-            {p.name} - ₹{p.price} - Vendor: {p.vendor?.name || "N/A"}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <h1>All Products</h1>
+      {products.map((p) => (
+        <p key={p._id}>{p.name}</p>
+      ))}
+    </>
   );
 }
