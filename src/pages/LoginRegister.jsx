@@ -1,90 +1,55 @@
-import React, { useState, useContext } from "react";
-import { loginUser, registerUser } from "../api/api.js";
-import { AuthContext } from "../context/AuthContext.jsx";
+// src/pages/Login.jsx
+import React, { useState } from "react";
+import { loginUser, setAuthToken } from "../api/api";
 import { useNavigate } from "react-router-dom";
 
-export default function LoginRegister() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [name, setName] = useState("");
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const { setUser, setToken } = useContext(AuthContext);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
+    setError("");
     try {
-      if (isLogin) {
-        const res = await loginUser({ email, password });
-
-        setUser(res.data.user);
-        setToken(res.data.token);
-
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-
-        navigate("/"); // redirect to homepage
-      } else {
-        const res = await registerUser({
-          name,
-          email,
-          password,
-          role: "customer",
-        });
-
-        alert("Registered successfully! Now login.");
-        setIsLogin(true);
-      }
+      const data = await loginUser({ email, password });
+      setAuthToken(data.token); // Set JWT for all future API calls
+      localStorage.setItem("token", data.token); // Optional: persist login
+      navigate("/dashboard"); // Redirect after login
     } catch (err) {
-      console.error("Auth error:", err);
-      alert(err.response?.data?.message || "Auth failed");
+      setError(err.message);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">{isLogin ? "Login" : "Register"}</h1>
-
-      <form onSubmit={handleSubmit} className="space-y-3 bg-white p-4 rounded shadow">
-        {!isLogin && (
-          <input
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="border p-2 w-full"
-            placeholder="Full name"
-          />
-        )}
-
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <form onSubmit={handleLogin} className="bg-white p-6 rounded shadow-md w-96">
+        <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
+        {error && <p className="text-red-500 mb-3">{error}</p>}
         <input
-          required
+          type="email"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 w-full"
-          placeholder="Email"
-        />
-
-        <input
+          className="border p-2 w-full mb-3 rounded"
           required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 w-full"
+        />
+        <input
           type="password"
           placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="border p-2 w-full mb-3 rounded"
+          required
         />
-
-        <button className="w-full bg-blue-600 text-white p-2 rounded">
-          {isLogin ? "Login" : "Register"}
+        <button
+          type="submit"
+          className="bg-blue-500 text-white p-2 w-full rounded hover:bg-blue-600 transition"
+        >
+          Login
         </button>
       </form>
-
-      <div className="text-center mt-3">
-        <button className="text-blue-600" onClick={() => setIsLogin(!isLogin)}>
-          {isLogin ? "Create an account" : "Have an account? Login"}
-        </button>
-      </div>
     </div>
   );
 }
