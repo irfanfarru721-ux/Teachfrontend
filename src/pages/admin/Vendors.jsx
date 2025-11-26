@@ -1,1 +1,0 @@
-export default function Vendors() { return <h1>Admin Vendors</h1>; }
