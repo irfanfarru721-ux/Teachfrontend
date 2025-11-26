@@ -8,7 +8,7 @@ const ProductsPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const token = localStorage.getItem("token");
-      const res = await fetch(`https://srudentbackend.onrender.com/api/products/vendor/${vendorId}`, {
+      const res = await fetch(`https://srudentbackend-1.onrender.com/api/products/vendor/${vendorId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
