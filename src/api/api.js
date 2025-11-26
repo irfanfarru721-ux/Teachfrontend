@@ -2,7 +2,7 @@
 import axios from "axios";
 
 export const API = axios.create({
-  baseURL: "https://srudentbackend.onrender.com/api", // your deployed backend
+  baseURL: "https://srudentbackend-1.onrender.com/api", // your deployed backend
 });
 
 // --------------------
