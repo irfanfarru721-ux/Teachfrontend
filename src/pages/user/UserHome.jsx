@@ -1,3 +1,1 @@
-export default function UserHome() {
-  return <h1>Welcome User</h1>;
-}
+export default function UserHome() { return <h1>User Home</h1>; }
