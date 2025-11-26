@@ -1,31 +1,31 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import { AuthProvider } from "./context/AuthContext.jsx";
+import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
 
-// USER pages
+// Pages
+import Login from "./pages/Login.jsx"; // Single login page
+import Signup from "./pages/UserSignup.jsx";
+
+// User Pages
 import Home from "./pages/Home.jsx";
 import Products from "./pages/Products.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 import Cart from "./pages/Cart.jsx";
 import Checkout from "./pages/Checkout.jsx";
-import UserLogin from "./pages/UserLogin.jsx";
-import UserSignup from "./pages/UserSignup.jsx";
 
-// ADMIN pages
-import AdminLogin from "./pages/admin/AdminLogin.jsx";
+// Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import AdminProducts from "./pages/admin/AdminProducts.jsx";
 import AdminVendors from "./pages/admin/AdminVendors.jsx";
 import AdminOrders from "./pages/admin/AdminOrders.jsx";
 
-// LAYOUTS
+// Layouts
 import AdminLayout from "./components/admin/AdminLayout.jsx";
 import UserLayout from "./components/user/UserLayout.jsx";
 
-// PROTECTED ROUTES
-import AdminProtectedRoute from "./routes/AdminProtectedRoute.jsx";
-import UserProtectedRoute from "./routes/UserProtectedRoute.jsx";
+// Protected Route
+import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 
 export default function App() {
   return (
@@ -33,107 +33,106 @@ export default function App() {
       <BrowserRouter>
         <Routes>
 
-          {/* ====================== USER ROUTES ====================== */}
-          <Route path="/login" element={<UserLogin />} />
-          <Route path="/signup" element={<UserSignup />} />
+          {/* ====================== LOGIN / SIGNUP ====================== */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
+          {/* ====================== USER ROUTES ====================== */}
           <Route
             path="/"
             element={
-              <UserLayout>
-                <Home />
-              </UserLayout>
+              <ProtectedRoute role="user">
+                <UserLayout>
+                  <Home />
+                </UserLayout>
+              </ProtectedRoute>
             }
           />
-
           <Route
             path="/products"
             element={
-              <UserLayout>
-                <Products />
-              </UserLayout>
+              <ProtectedRoute role="user">
+                <UserLayout>
+                  <Products />
+                </UserLayout>
+              </ProtectedRoute>
             }
           />
-
           <Route
             path="/product/:id"
             element={
-              <UserLayout>
-                <ProductDetails />
-              </UserLayout>
+              <ProtectedRoute role="user">
+                <UserLayout>
+                  <ProductDetails />
+                </UserLayout>
+              </ProtectedRoute>
             }
           />
-
           <Route
             path="/cart"
             element={
-              <UserProtectedRoute>
+              <ProtectedRoute role="user">
                 <UserLayout>
                   <Cart />
                 </UserLayout>
-              </UserProtectedRoute>
+              </ProtectedRoute>
             }
           />
-
           <Route
             path="/checkout"
             element={
-              <UserProtectedRoute>
+              <ProtectedRoute role="user">
                 <UserLayout>
                   <Checkout />
                 </UserLayout>
-              </UserProtectedRoute>
+              </ProtectedRoute>
             }
           />
 
           {/* ====================== ADMIN ROUTES ====================== */}
-
-          <Route path="/admin/login" element={<AdminLogin />} />
-
           <Route
             path="/admin/dashboard"
             element={
-              <AdminProtectedRoute>
+              <ProtectedRoute role="admin">
                 <AdminLayout>
                   <AdminDashboard />
                 </AdminLayout>
-              </AdminProtectedRoute>
+              </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/products"
             element={
-              <AdminProtectedRoute>
+              <ProtectedRoute role="admin">
                 <AdminLayout>
                   <AdminProducts />
                 </AdminLayout>
-              </AdminProtectedRoute>
+              </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/vendors"
             element={
-              <AdminProtectedRoute>
+              <ProtectedRoute role="admin">
                 <AdminLayout>
                   <AdminVendors />
                 </AdminLayout>
-              </AdminProtectedRoute>
+              </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/orders"
             element={
-              <AdminProtectedRoute>
+              <ProtectedRoute role="admin">
                 <AdminLayout>
                   <AdminOrders />
                 </AdminLayout>
-              </AdminProtectedRoute>
+              </ProtectedRoute>
             }
           />
 
+          {/* ====================== FALLBACK ====================== */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
