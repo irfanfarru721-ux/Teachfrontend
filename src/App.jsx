@@ -4,13 +4,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
 
 // USER pages
-import Home from "./pages/user/Home.jsx";
-import Products from "./pages/user/Products.jsx";
-import ProductDetails from "./pages/user/ProductDetails.jsx";
-import Cart from "./pages/user/Cart.jsx";
-import Checkout from "./pages/user/Checkout.jsx";
-import UserLogin from "./pages/user/UserLogin.jsx";
-import UserSignup from "./pages/user/UserSignup.jsx";
+import Home from "./pages/Home.jsx";
+import Products from "./pages/Products.jsx";
+import ProductDetails from "./pages/ProductDetails.jsx";
+import Cart from "./pages/Cart.jsx";
+import Checkout from "./pages/Checkout.jsx";
+import UserLogin from "./pages/UserLogin.jsx";
+import UserSignup from "./pages/UserSignup.jsx";
 
 // ADMIN pages
 import AdminLogin from "./pages/admin/AdminLogin.jsx";
