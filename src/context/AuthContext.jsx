@@ -1,35 +1,40 @@
-import { createContext, useState, useEffect } from "react";
-import { setAuthToken } from "../api/api.js";
+// src/context/AuthContext.jsx
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { setAuthToken } from "../api/api";
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
+// Provider
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
 
-  // Restore auth state on mount
+  // Load token from localStorage on mount
   useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    const savedUser = localStorage.getItem("user");
-
-    if (savedToken) {
-      setToken(savedToken);
-      setAuthToken(savedToken); // ✅ ensures all axios requests use token
-    }
-
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+    const token = localStorage.getItem("token");
+    if (token) {
+      setAuthToken(token);
+      setUser({ token });
     }
   }, []);
 
-  // Whenever token changes, update Axios header
-  useEffect(() => {
+  const login = (token) => {
     setAuthToken(token);
-  }, [token]);
+    localStorage.setItem("token", token);
+    setUser({ token });
+  };
+
+  const logout = () => {
+    setAuthToken(null);
+    localStorage.removeItem("token");
+    setUser(null);
+  };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, token, setToken }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
+
+// Custom hook for consuming context
+export const useAuth = () => useContext(AuthContext);
