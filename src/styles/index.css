@@ -2,33 +2,8 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
 }
-
-.navbar {
-  background-color: #333;
-  color: #fff;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.user-layout, .admin-layout {
-  display: flex;
-  flex-direction: column;
-}
-
-.user-content, .admin-content {
-  display: flex;
-}
-
-.user-sidebar, .admin-sidebar {
-  width: 200px;
-  background-color: #f5f5f5;
-  padding: 10px;
-  height: calc(100vh - 64px);
-}
-
-.user-main, .admin-main {
-  flex: 1;
-  padding: 20px;
+nav a {
+  text-decoration: none;
+  color: white;
+  margin-right: 10px;
 }
