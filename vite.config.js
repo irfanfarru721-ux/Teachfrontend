@@ -3,6 +3,5 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "./",        // important for Render static site
-  server: { port: 5173 }
+  base: "./", // important for Render
 });
