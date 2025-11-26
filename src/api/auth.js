@@ -4,7 +4,7 @@ export const registerUser = async ({ name, email, password }) => {
   try {
     const res = await axios({
       method: "POST",
-      url: "https://srudentbackend.onrender.com/api/auth/register",
+      url: "https://srudentbackend-1.onrender.com/api/auth/register",
       headers: {
         "Content-Type": "application/json",
       },
