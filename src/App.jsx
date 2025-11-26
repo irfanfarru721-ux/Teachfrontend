@@ -77,7 +77,7 @@ export default function App() {
 
           <Route
             path="/checkout"
-            element{
+            element={
               <UserProtectedRoute>
                 <UserLayout>
                   <Checkout />
