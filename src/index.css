@@ -2,7 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* small defaults */
+/* optional global styles */
 body {
-  @apply bg-gray-50 text-gray-900;
+  font-family: system-ui, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
 }
